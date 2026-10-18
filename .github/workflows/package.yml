@@ -1,0 +1,48 @@
+name: Package Addon
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Addon ZIP
+        run: |
+          ADDON_NAME="${GITHUB_REPOSITORY#*/}"
+          ZIP_NAME="${ADDON_NAME}-latest.zip"
+          mkdir -p "staging/${ADDON_NAME}"
+          rsync -av --exclude='.git' \
+                    --exclude='.github' \
+                    --exclude='.gitignore' \
+                    --exclude='staging' \
+                    --exclude='*.zip' \
+                    ./ "staging/${ADDON_NAME}/"
+          cd staging
+          zip -r "../${ZIP_NAME}" "${ADDON_NAME}"
+          cd ..
+
+      - name: Publish Latest Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ADDON_NAME="${GITHUB_REPOSITORY#*/}"
+          ZIP_NAME="${ADDON_NAME}-latest.zip"
+          
+          # Delete existing tag/release if it exists so it updates in place
+          gh release delete latest --yes || true
+          git tag -d latest || true
+          git push origin :latest || true
+          
+          # Create fresh release and attach the zip
+          gh release create latest "${ZIP_NAME}" \
+            --title "${ADDON_NAME} (Latest Build)" \
+            --notes "Automated build from commit ${{ github.sha }}."

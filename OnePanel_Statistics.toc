@@ -1,0 +1,9 @@
+## Interface: 16001
+## Title: OnePanel |cff00ccffStatistics|r
+## Notes: Comprehensive character statistics and achievements tracking plugin for OnePanel Suite.
+## Author: OnePanel Suite Team
+## Version: 0.0.1
+## IconTexture: Interface\Icons\INV_Misc_Note_03
+## Dependencies: OnePanel, OnePanelUtils
+
+Core.lua
