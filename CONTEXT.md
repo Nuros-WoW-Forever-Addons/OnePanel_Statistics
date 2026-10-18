@@ -29,7 +29,7 @@
 - `Core.lua`: Complete plugin implementation:
   - Hierarchical category tree utilizing `GetStatisticsCategoryList()`, `GetCategoryInfo(categoryID)`, and `GetCategoryNumAchievements(categoryID)`.
   - Statistics data retrieval via `GetStatistic(categoryID, index)` and `GetAchievementInfo(statID)`.
-  - Collapsible category and subcategory headers styled with Blizzard Camelot `common-button-list-collapseExpand` buttons and plus/minus icons (`common-button-list-plus` / `common-button-list-minus`).
+  - Collapsible category and subcategory headers styled with Blizzard metallic disabled grey buttons (`UIPanelButtonTemplate`), matching Character Stats, Skills, and Reputation.
   - High-contrast statistics rows (Name on the left, formatted value on the right, `--` placeholder for unrecorded stats).
   - Search filter editbox with instant clear and "Collapse All / Expand All" silver action buttons.
   - Interactive right-hand details drawer displaying selected statistic cards, breadcrumbs (`Category > Subcategory`), large numeric values, and descriptions.
@@ -70,7 +70,7 @@ When picking up development on this addon:
 ### Spin 0.0.1 (Initial Implementation & OnePanel Integration)
 - **Plugin Scaffolding**: Created manifest, documentation, workflow, and registered as Tab 6 (`order = 60`) with parchment note icon (`INV_Misc_Note_03`).
 - **Hierarchical Category Tree**: Extracted root and child categories from `GetStatisticsCategoryList()` (Character, Combat, Kills, Quests, Dungeons & Raids, Skills, PvP).
-- **Blizzard Camelot Grey Header Buttons**: Adopted authentic `common-button-list-collapseExpand` buttons with plus/minus icons for root categories and indented subcategories (e.g. Wealth, Consumables, Reputation).
+- **Blizzard Metallic Grey Header Buttons**: Adopted authentic disabled `UIPanelButtonTemplate` button banners with gold text for root categories and indented subcategories (e.g. Wealth, Consumables, Reputation), perfectly matching Character Stats, Skills, and Reputation headers.
 - **Formatted Statistics Rows**: Comma-separated numbers, clean `--` formatting, alternating subtle row backgrounds, and hover highlights.
 - **Side Details Drawer**: Interactive statistics card with large title, breadcrumb category path, bold value display, and description text.
 - **Search & Collapse Controls**: Real-time instant search box with clear button and "Collapse All / Expand All" toggle.

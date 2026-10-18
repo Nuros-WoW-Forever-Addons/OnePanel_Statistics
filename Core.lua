@@ -608,77 +608,39 @@ local function CreateStatisticsView(parentFrame)
         sel:Hide()
         row.SelectedHighlight = sel
 
-        -- Collapsible Header Button (Matching Skills, Reputation, and Currency buttons)
-        local headerBtn = CreateFrame("Button", nil, row)
+        -- Collapsible Header Button (Matches Character Stats, Skills, and Reputation UIPanelButtonTemplate)
+        local headerBtn = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
         headerBtn:SetAllPoints(row)
+        headerBtn:Disable()
         headerBtn:Hide()
-
-        local headerBg = headerBtn:CreateTexture(nil, "BACKGROUND")
-        headerBg:SetAllPoints(headerBtn)
-        if SafeHasAtlas("common-button-list-collapseExpand") then
-            headerBg:SetAtlas("common-button-list-collapseExpand")
-        else
-            headerBg:SetTexture("Interface\\Buttons\\UI-Listbox-Highlight")
-            headerBg:SetVertexColor(0.25, 0.25, 0.28, 0.9)
+        if headerBtn.SetDisabledFontObject then
+            headerBtn:SetDisabledFontObject("GameFontNormal")
         end
-        headerBtn.Bg = headerBg
-
-        local headerHl = headerBtn:CreateTexture(nil, "HIGHLIGHT")
-        headerHl:SetAllPoints(headerBtn)
-        if SafeHasAtlas("common-button-list-collapseExpand") then
-            headerHl:SetAtlas("common-button-list-collapseExpand")
-            headerHl:SetBlendMode("ADD")
-            headerHl:SetAlpha(0.3)
+        local hFont = headerBtn:GetFontString()
+        if hFont then
+            hFont:SetFont(GetStandardFont(), 13, "")
+            hFont:SetTextColor(1, 0.85, 0.1, 1)
+            hFont:SetShadowOffset(1, -1)
+            hFont:SetShadowColor(0, 0, 0, 1)
         end
-
-        local headerIcon = headerBtn:CreateTexture(nil, "OVERLAY")
-        headerIcon:SetSize(14, 14)
-        headerIcon:SetPoint("RIGHT", headerBtn, "RIGHT", -8, 0)
-        headerBtn.Icon = headerIcon
-
-        local headerText = headerBtn:CreateFontString(nil, "OVERLAY")
-        headerText:SetPoint("LEFT", headerBtn, "LEFT", 10, 0)
-        headerText:SetPoint("RIGHT", headerBtn, "RIGHT", -30, 0)
-        headerText:SetJustifyH("LEFT")
-        headerText:SetFont(GetStandardFont(), 13, "")
-        headerText:SetTextColor(1, 0.85, 0.1, 1)
-        headerText:SetShadowOffset(1, -1)
-        headerText:SetShadowColor(0, 0, 0, 1)
-        headerBtn.Text = headerText
-
         row.HeaderButton = headerBtn
 
-        -- Subcategory Button (Indented for nested sections like Wealth, Consumables)
-        local subHeaderBtn = CreateFrame("Button", nil, row)
+        -- Subcategory Header Button (Indented UIPanelButtonTemplate for nested sections like Wealth, Consumables)
+        local subHeaderBtn = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
         subHeaderBtn:SetPoint("TOPLEFT", row, "TOPLEFT", 12, 0)
         subHeaderBtn:SetPoint("BOTTOMRIGHT", row, "BOTTOMRIGHT", 0, 0)
+        subHeaderBtn:Disable()
         subHeaderBtn:Hide()
-
-        local subHeaderBg = subHeaderBtn:CreateTexture(nil, "BACKGROUND")
-        subHeaderBg:SetAllPoints(subHeaderBtn)
-        if SafeHasAtlas("common-button-list-collapseExpand") then
-            subHeaderBg:SetAtlas("common-button-list-collapseExpand")
-        else
-            subHeaderBg:SetTexture("Interface\\Buttons\\UI-Listbox-Highlight")
-            subHeaderBg:SetVertexColor(0.20, 0.20, 0.22, 0.85)
+        if subHeaderBtn.SetDisabledFontObject then
+            subHeaderBtn:SetDisabledFontObject("GameFontNormal")
         end
-        subHeaderBtn.Bg = subHeaderBg
-
-        local subHeaderIcon = subHeaderBtn:CreateTexture(nil, "OVERLAY")
-        subHeaderIcon:SetSize(13, 13)
-        subHeaderIcon:SetPoint("RIGHT", subHeaderBtn, "RIGHT", -8, 0)
-        subHeaderBtn.Icon = subHeaderIcon
-
-        local subHeaderText = subHeaderBtn:CreateFontString(nil, "OVERLAY")
-        subHeaderText:SetPoint("LEFT", subHeaderBtn, "LEFT", 8, 0)
-        subHeaderText:SetPoint("RIGHT", subHeaderBtn, "RIGHT", -28, 0)
-        subHeaderText:SetJustifyH("LEFT")
-        subHeaderText:SetFont(GetStandardFont(), 12, "")
-        subHeaderText:SetTextColor(0.95, 0.85, 0.35, 1)
-        subHeaderText:SetShadowOffset(1, -1)
-        subHeaderText:SetShadowColor(0, 0, 0, 1)
-        subHeaderBtn.Text = subHeaderText
-
+        local subFont = subHeaderBtn:GetFontString()
+        if subFont then
+            subFont:SetFont(GetStandardFont(), 12, "")
+            subFont:SetTextColor(0.95, 0.85, 0.35, 1)
+            subFont:SetShadowOffset(1, -1)
+            subFont:SetShadowColor(0, 0, 0, 1)
+        end
         row.SubHeaderButton = subHeaderBtn
 
         -- Statistic Value Text (Right aligned)
@@ -772,7 +734,7 @@ local function CreateStatisticsView(parentFrame)
             local shouldShowRoot = not isFiltering or rootMatches
 
             if shouldShowRoot then
-                -- Render Root Category Header
+                -- Render Root Category Header (Authentic UIPanelButtonTemplate disabled grey button)
                 local row = listContent.rows[rowIndex] or CreateRow(rowIndex)
                 row:ClearAllPoints()
                 row:SetPoint("TOPLEFT", listContent, "TOPLEFT", 4, yOffset)
@@ -785,31 +747,37 @@ local function CreateStatisticsView(parentFrame)
                 row.SelectedHighlight:Hide()
                 row.SubHeaderButton:Hide()
 
-                row.HeaderButton:Show()
-                row.HeaderButton.Text:SetText(root.name)
-
-                if isRootCollapsed then
-                    if SafeHasAtlas("common-button-list-plus") then
-                        row.HeaderButton.Icon:SetAtlas("common-button-list-plus")
-                    else
-                        row.HeaderButton.Icon:SetTexture("Interface\\Buttons\\UI-PlusButton-Up")
-                    end
-                else
-                    if SafeHasAtlas("common-button-list-minus") then
-                        row.HeaderButton.Icon:SetAtlas("common-button-list-minus")
-                    else
-                        row.HeaderButton.Icon:SetTexture("Interface\\Buttons\\UI-MinusButton-Up")
-                    end
+                local headerBtn = row.HeaderButton
+                headerBtn:Show()
+                headerBtn:ClearAllPoints()
+                headerBtn:SetAllPoints(row)
+                headerBtn:SetHeight(26)
+                headerBtn:SetText(root.name)
+                headerBtn:Disable()
+                headerBtn:EnableMouse(true)
+                local hFont = headerBtn:GetFontString()
+                if hFont then
+                    hFont:SetFont(GetStandardFont(), 13, "")
+                    hFont:SetTextColor(1, 0.85, 0.1, 1)
+                    hFont:SetShadowOffset(1, -1)
+                    hFont:SetShadowColor(0, 0, 0, 1)
                 end
 
-                row.HeaderButton:SetScript("OnClick", function()
-                    collapsedCategories[root.categoryID] = not collapsedCategories[root.categoryID]
+                local catID = root.categoryID
+                headerBtn:SetScript("OnMouseUp", function(self, button)
+                    if button == "LeftButton" then
+                        collapsedCategories[catID] = not collapsedCategories[catID]
+                        RefreshList()
+                    end
+                end)
+                row:SetScript("OnClick", function()
+                    collapsedCategories[catID] = not collapsedCategories[catID]
                     RefreshList()
                 end)
 
                 row:Show()
                 rowIndex = rowIndex + 1
-                yOffset = yOffset - 28
+                yOffset = yOffset - 30
 
                 -- If root is expanded, render direct stats and subcategories
                 if not isRootCollapsed then
@@ -867,7 +835,7 @@ local function CreateStatisticsView(parentFrame)
                         local subStats = subItem.stats
                         local isSubCollapsed = (collapsedCategories[sub.categoryID] == true) and not isFiltering
 
-                        -- Subcategory Header (Indented with matching grey button styling)
+                        -- Subcategory Header (Indented UIPanelButtonTemplate disabled grey button)
                         local subRow = listContent.rows[rowIndex] or CreateRow(rowIndex)
                         subRow:ClearAllPoints()
                         subRow:SetPoint("TOPLEFT", listContent, "TOPLEFT", 4, yOffset)
@@ -880,31 +848,38 @@ local function CreateStatisticsView(parentFrame)
                         subRow.ValueText:Hide()
                         subRow.SelectedHighlight:Hide()
 
-                        subRow.SubHeaderButton:Show()
-                        subRow.SubHeaderButton.Text:SetText(sub.name)
-
-                        if isSubCollapsed then
-                            if SafeHasAtlas("common-button-list-plus") then
-                                subRow.SubHeaderButton.Icon:SetAtlas("common-button-list-plus")
-                            else
-                                subRow.SubHeaderButton.Icon:SetTexture("Interface\\Buttons\\UI-PlusButton-Up")
-                            end
-                        else
-                            if SafeHasAtlas("common-button-list-minus") then
-                                subRow.SubHeaderButton.Icon:SetAtlas("common-button-list-minus")
-                            else
-                                subRow.SubHeaderButton.Icon:SetTexture("Interface\\Buttons\\UI-MinusButton-Up")
-                            end
+                        local subHeaderBtn = subRow.SubHeaderButton
+                        subHeaderBtn:Show()
+                        subHeaderBtn:ClearAllPoints()
+                        subHeaderBtn:SetPoint("TOPLEFT", subRow, "TOPLEFT", 12, 0)
+                        subHeaderBtn:SetPoint("BOTTOMRIGHT", subRow, "BOTTOMRIGHT", 0, 0)
+                        subHeaderBtn:SetHeight(24)
+                        subHeaderBtn:SetText(sub.name)
+                        subHeaderBtn:Disable()
+                        subHeaderBtn:EnableMouse(true)
+                        local subFont = subHeaderBtn:GetFontString()
+                        if subFont then
+                            subFont:SetFont(GetStandardFont(), 12, "")
+                            subFont:SetTextColor(0.95, 0.85, 0.35, 1)
+                            subFont:SetShadowOffset(1, -1)
+                            subFont:SetShadowColor(0, 0, 0, 1)
                         end
 
-                        subRow.SubHeaderButton:SetScript("OnClick", function()
-                            collapsedCategories[sub.categoryID] = not collapsedCategories[sub.categoryID]
+                        local subCatID = sub.categoryID
+                        subHeaderBtn:SetScript("OnMouseUp", function(self, button)
+                            if button == "LeftButton" then
+                                collapsedCategories[subCatID] = not collapsedCategories[subCatID]
+                                RefreshList()
+                            end
+                        end)
+                        subRow:SetScript("OnClick", function()
+                            collapsedCategories[subCatID] = not collapsedCategories[subCatID]
                             RefreshList()
                         end)
 
                         subRow:Show()
                         rowIndex = rowIndex + 1
-                        yOffset = yOffset - 26
+                        yOffset = yOffset - 28
 
                         -- If subcategory expanded, render its stats
                         if not isSubCollapsed then

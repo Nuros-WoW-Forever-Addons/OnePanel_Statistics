@@ -12,8 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **OnePanel Docking**: Registered as Tab 6 (`order = 60`, parchment note icon `INV_Misc_Note_03`) in the OnePanel Suite.
 - **Hierarchical Collapsible Categories**:
   - Root categories (Character, Combat, Kills, Quests, Dungeons & Raids, Skills, PvP) and nested subcategories (Wealth, Consumables, Reputation, etc.).
-  - Authentic Blizzard Camelot grey header buttons (`common-button-list-collapseExpand`) with plus/minus icons (`common-button-list-plus` / `common-button-list-minus`).
-  - Indented subcategory headers matching Skills and Currency designs.
+  - Authentic Blizzard disabled metallic grey button banners (`UIPanelButtonTemplate`) with gold text, perfectly matching Character Stats, Skills, and Reputation headers.
+  - Indented disabled grey button banners for child subcategories (Wealth, Consumables, Reputation, etc.).
 - **Real-Time Search & Quick Actions**:
   - Instant text filter editbox to search across all statistics.
   - "Collapse All / Expand All" silver action button.
